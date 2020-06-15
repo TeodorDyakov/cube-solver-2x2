@@ -12,6 +12,8 @@ not_sune(up_prim).
 not_sune(front_prim).
 not_sune(right_prim).
 
+t_perm_or_up(t_perm).
+t_perm_or_up(up).
 
 solved(
 cube(C1,C1,C1,C1,C2,C2,C2,C2,C3,C3,C3,C3,C4,C4,C4,C4,C5,C5,C5,C5,C6,C6,C6,C6)).
@@ -33,23 +35,29 @@ orient_top([], Cube, Cube).
 orient_top([NextRotation | Rotation], Cube, EndState) :- orient_top(Rotation, CurrentState, EndState),
 rotateside(NextRotation, Cube, CurrentState), sune_or_up(NextRotation).
 
+permute_top([], Cube, Cube).
+permute_top([NextRotation | Rotation], Cube, EndState) :- permute_top(Rotation, CurrentState, EndState),
+rotateside(NextRotation, Cube, CurrentState), t_perm_or_up(NextRotation).
+
 ?-
 %G_scramble := cube(y,y,y,y,r,r,b,b,w,w,w,w,o,o,g,g,b,b,o,o,g,g,r,r).
 %G_scramble := cube(y,y,y,y,o,o,o,o,w,w,w,w,r,r,r,r,g,g,g,g,b,b,b,b).
-G_scramble := cube(b,y,g,o,r,b,o,o,w,y,o,r,r,w,w,b,r,y,w,g,y,b,g,g).
-%G_scramble := cube(b,y,g,w,w,b,r,b,y,y,g,b,o,r,w,o,y,r,w,g,o,g,o,r).
-%G_scramble := cube(o,g,y,r,b,y,b,b,w,w,w,w,r,y,g,g,g,o,o,o,b,y,r,r).
+%G_scramble := cube(b,y,g,o,r,b,o,o,w,y,o,r,r,w,w,b,r,y,w,g,y,b,g,g).
+G_scramble := cube(b,y,g,w,w,b,r,b,y,y,g,b,o,r,w,o,y,r,w,g,o,g,o,r).
+%G_scramble  := cube(y,y,y,y,r,g,r,r,w,w,w,w,g,o,o,o,b,b,b,b,o,r,g,g).
 
-%?-
-%top_oriented(cube(y,o,r,g,y,o,r,r,w,w,w,w,y,b,o,o,r,g,b,b,y,b,g,g)).
 ?-
- 	solve_layer_one(Solution,G_scramble, C),
+	solve_layer_one(Solution,G_scramble, C),
  	layer_one_solved(C),
  	write(Solution),
- 	orient_top(Solution2, C, X),
+ 	
+	orient_top(Solution2, C, X),
  	top_oriented(X),
- 	write(Solution2).
+ 	write(Solution2),
 
+	permute_top(Solution3, X, Z),
+ 	solved(Z),
+ 	write(Solution3).
 
 %permutation of cube after rotating up side clockwise
 rotateside(up,
@@ -81,7 +89,12 @@ rotateside(front_prim,
 cube(C1, C2,  C3,  C4, C5, C6, C7, C8,  C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24),
 cube(C1, C2, C21, C23, C6, C8, C5, C7, C18, C20, C11, C12, C13, C14, C15, C16, C17,  C4, C19,  C3, C10, C22,  C9, C24)).
 
+%permutation of cube after doing the sune algorithm
+rotateside(sune,
+cube(C1 , C2,  C3, C4, C5,  C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24),
+cube(C6 , C3, C22, C14, C2, C17, C7, C8, C9, C10, C11, C12,  C5, C21, C15, C16,  C4, C13, C19, C20,  C1, C18, C23, C24)).
 
-rotateside('sune',
-cube(C1 , C2,   C3,  C4, C5,  C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24),
-cube(C6 , C3,  C22, C14, C2, C17, C7, C8, C9, C10, C11, C12,  C5, C21, C15, C16,  C4, C13, C19, C20,  C1, C18, C23, C24)).
+%permutation of cube after doing the t_perm algorithm
+rotateside(t_perm,
+cube(C1 , C2, C3, C4, C5,  C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24),
+cube(C1 , C2, C3, C4, C5, C22, C7, C8, C9, C10, C11, C12, C21, C14, C15, C16, C17, C18, C19, C20, C13, C6, C23, C24)).
