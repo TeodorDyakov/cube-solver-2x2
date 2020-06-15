@@ -29,7 +29,6 @@ solve_layer_one([], Cube, Cube).
 solve_layer_one([NextRotation | Rotation], Cube, EndState) :- solve_layer_one(Rotation, CurrentState, EndState),
 rotateside(NextRotation, Cube, CurrentState), not_sune(NextRotation).
 
-
 %recursive predicate which finds the moves from cube with one layer solved to cube with top oriented.
 orient_top([], Cube, Cube).
 orient_top([NextRotation | Rotation], Cube, EndState) :- orient_top(Rotation, CurrentState, EndState),
