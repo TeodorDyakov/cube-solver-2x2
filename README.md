@@ -1,0 +1,1 @@
+# Strawberry-prolog-2020-FMI
