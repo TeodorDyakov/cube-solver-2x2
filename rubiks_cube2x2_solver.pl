@@ -11,8 +11,11 @@ rotateside(NextRotation, Cube, CurrentState).
 
 %cube(y,y,y,y,r,r,b,b,w,w,w,w,o,o,g,g,b,b,o,o,g,g,r,r)
 %cube(y,y,y,y,o,o,o,o,w,w,w,w,r,r,r,r,g,g,g,g,b,b,b,b)
+%cube(o,g,w,y,b,b,r,y,y,o,w,g,o,y,r,o,g,r,b,g,r,w,b,w)
+?-
+G_s := cube(b,y,g,w,w,b,r,b,y,y,g,b,o,r,w,o,y,r,w,g,o,g,o,r).
 
-?- solve(Solution,cube(y,y,y,y,r,r,b,b,w,w,w,w,o,o,g,g,b,b,o,o,g,g,r,r), C),
+?- solve(Solution,G_s, C),
  layer_one_solved(C),
  write(Solution).
 
@@ -32,13 +35,13 @@ rotateside(right_prim,
 cube(C1,  C2, C3,  C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24),
 cube(C1, C15, C3, C13, C5, C2, C7, C4, C9,  C6, C11,  C8, C12, C14, C10, C16, C17, C18, C19, C20, C22, C24, C21, C23)).
 
-rotateside(left,
+rotateside(front,
 cube(C1, C2, C3,   C4, C5, C6, C7, C8,  C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24),
 cube(C1, C2, C20, C18, C7, C5, C8, C6, C23, C21, C11, C12, C13, C14, C15, C16, C17,  C9, C19, C10,  C3, C22,  C4, C24)).
 
-rotateside(left_prim,
+rotateside(front_prim,
 cube(C1, C2,  C3,  C4, C5, C6, C7, C8,  C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24),
 cube(C1, C2, C21, C23, C6, C8, C5, C7, C18, C20, C11, C12, C13, C14, C15, C16, C17,  C4, C19,  C3, C10, C22,  C9, C24)).
 
 
-
+algorithm_sune(sune)
