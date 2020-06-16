@@ -5,12 +5,12 @@
 sune_or_up(up).
 sune_or_up(sune).
 
-not_sune(up).
-not_sune(right).
-not_sune(front).
-not_sune(up_prim).
-not_sune(front_prim).
-not_sune(right_prim).
+side(up).
+side(up_prim).
+side(right).
+side(right_prim).
+side(front).
+side(front_prim).
 
 t_perm_or_up(t_perm).
 t_perm_or_up(up).
@@ -27,13 +27,14 @@ cube(C1,C1,C1,C1,C2,C3,C4,C4,C5,C5,C5,C5,C7,C8,C9,C9,C10,C11,C12,C12,C13,C14,C15
 %recursive predicate which finds the moves from scrambled cube to solved layer one.
 solve_layer_one([], Cube, Cube).
 solve_layer_one([NextRotation | Rotation], Cube, EndState) :- solve_layer_one(Rotation, CurrentState, EndState),
-rotateside(NextRotation, Cube, CurrentState), not_sune(NextRotation).
+rotateside(NextRotation, Cube, CurrentState), side(NextRotation).
 
-%recursive predicate which finds the moves from cube with one layer solved to cube with top oriented.
+%recursive predicate which finds the moves from cube with one layer solved to cube with one layer solve and top oriented.
 orient_top([], Cube, Cube).
 orient_top([NextRotation | Rotation], Cube, EndState) :- orient_top(Rotation, CurrentState, EndState),
 rotateside(NextRotation, Cube, CurrentState), sune_or_up(NextRotation).
 
+%recursive predicate which finds the moves from cube with one layer solved and top oriented to solved cube.
 permute_top([], Cube, Cube).
 permute_top([NextRotation | Rotation], Cube, EndState) :- permute_top(Rotation, CurrentState, EndState),
 rotateside(NextRotation, Cube, CurrentState), t_perm_or_up(NextRotation).
