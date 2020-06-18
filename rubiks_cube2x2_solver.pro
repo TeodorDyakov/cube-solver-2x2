@@ -2,8 +2,29 @@
 %where each argument represents the color of the sticker at that position.
 %The Positions are according to cube_diagram.png
 
-sune_or_up(up).
-sune_or_up(sune).
+%Test scrambles:
+%G_scramble := cube(y,y,y,y,r,r,b,b,w,w,w,w,o,o,g,g,b,b,o,o,g,g,r,r).
+%G_scramble := cube(y,y,y,y,o,o,o,o,w,w,w,w,r,r,r,r,g,g,g,g,b,b,b,b).
+%G_scramble := cube(b,y,g,o,r,b,o,o,w,y,o,r,r,w,w,b,r,y,w,g,y,b,g,g).
+%G_scramble  := cube(y,y,y,y,r,g,r,r,w,w,w,w,g,o,o,o,b,b,b,b,o,r,g,g).
+
+?-
+	%The scramble to solve
+	G_scramble := cube(b,y,g,w,w,b,r,b,y,y,g,b,o,r,w,o,y,r,w,g,o,g,o,r),
+	
+	write("the solution to the scramble is:"),nl,
+	
+	solve_layer_one(Solution,G_scramble, C),
+ 	layer_one_solved(C),
+ 	write(Solution),nl,
+ 	
+	orient_top(Solution2, C, X),
+ 	top_oriented(X),
+ 	write(Solution2),nl,
+
+	permute_top(Solution3, X, Z),
+ 	solved(Z),
+ 	write(Solution3),nl.
 
 side(up).
 side(up_prim).
@@ -11,9 +32,10 @@ side(right).
 side(right_prim).
 side(front).
 side(front_prim).
-
 t_perm_or_up(t_perm).
 t_perm_or_up(up).
+sune_or_up(up).
+sune_or_up(sune).
 
 solved(
 cube(C1,C1,C1,C1,C2,C2,C2,C2,C3,C3,C3,C3,C4,C4,C4,C4,C5,C5,C5,C5,C6,C6,C6,C6)).
@@ -26,38 +48,24 @@ cube(C1,C1,C1,C1,C2,C3,C4,C4,C5,C5,C5,C5,C7,C8,C9,C9,C10,C11,C12,C12,C13,C14,C15
 
 %recursive predicate which finds the moves from scrambled cube to solved layer one.
 solve_layer_one([], Cube, Cube).
-solve_layer_one([NextRotation | Rotation], Cube, EndState) :- solve_layer_one(Rotation, CurrentState, EndState),
-rotateside(NextRotation, Cube, CurrentState), side(NextRotation).
+solve_layer_one([NextRotation | Rotation], Cube, EndState) :-
+	solve_layer_one(Rotation, CurrentState, EndState),
+	rotateside(NextRotation, Cube, CurrentState),
+	side(NextRotation).
 
 %recursive predicate which finds the moves from cube with one layer solved to cube with one layer solve and top oriented.
 orient_top([], Cube, Cube).
-orient_top([NextRotation | Rotation], Cube, EndState) :- orient_top(Rotation, CurrentState, EndState),
-rotateside(NextRotation, Cube, CurrentState), sune_or_up(NextRotation).
+orient_top([NextRotation | Rotation], Cube, EndState) :-
+	orient_top(Rotation, CurrentState, EndState),
+	rotateside(NextRotation, Cube, CurrentState),
+ 	sune_or_up(NextRotation).
 
 %recursive predicate which finds the moves from cube with one layer solved and top oriented to solved cube.
 permute_top([], Cube, Cube).
-permute_top([NextRotation | Rotation], Cube, EndState) :- permute_top(Rotation, CurrentState, EndState),
-rotateside(NextRotation, Cube, CurrentState), t_perm_or_up(NextRotation).
-
-?-
-%G_scramble := cube(y,y,y,y,r,r,b,b,w,w,w,w,o,o,g,g,b,b,o,o,g,g,r,r).
-%G_scramble := cube(y,y,y,y,o,o,o,o,w,w,w,w,r,r,r,r,g,g,g,g,b,b,b,b).
-%G_scramble := cube(b,y,g,o,r,b,o,o,w,y,o,r,r,w,w,b,r,y,w,g,y,b,g,g).
-G_scramble := cube(b,y,g,w,w,b,r,b,y,y,g,b,o,r,w,o,y,r,w,g,o,g,o,r).
-%G_scramble  := cube(y,y,y,y,r,g,r,r,w,w,w,w,g,o,o,o,b,b,b,b,o,r,g,g).
-
-?-
-	solve_layer_one(Solution,G_scramble, C),
- 	layer_one_solved(C),
- 	write(Solution),
- 	
-	orient_top(Solution2, C, X),
- 	top_oriented(X),
- 	write(Solution2),
-
-	permute_top(Solution3, X, Z),
- 	solved(Z),
- 	write(Solution3).
+permute_top([NextRotation | Rotation], Cube, EndState) :- 
+	permute_top(Rotation, CurrentState, EndState),
+	rotateside(NextRotation, Cube, CurrentState), 
+	t_perm_or_up(NextRotation).
 
 %permutation of cube after rotating up side clockwise
 rotateside(up,
